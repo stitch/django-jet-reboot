@@ -9,6 +9,7 @@ import operator
 from jet.models import Bookmark, PinnedApplication
 from jet.utils import get_model_instance_label, user_is_authenticated
 from functools import reduce
+from jet import settings
 
 try:
     from django.apps import apps
@@ -146,6 +147,14 @@ class ModelLookupForm(forms.Form):
             lambda instance: {'id': instance.pk, 'text': get_model_instance_label(instance)},
             qs.all()[offset:offset + limit]
         ))
-        total = qs.count()
+        # do not perform select count queries because they are extremely slow in both
+        # mysql and postgres when you've got > millions of records. This will let you wait forever
+        # while the results are already in.
+        if not settings.JET_SHOW_COUNT_ON_ADMIN_PAGE:
+            # and you'll rarely browse through > 100 pages. So just give a ton of pages
+            # as pagination is already broken in the UI in the first place.
+            total = 200000
+        else:
+            total = qs.count()
 
         return items, total

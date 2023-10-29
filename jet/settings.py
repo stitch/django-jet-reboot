@@ -11,3 +11,5 @@ JET_SIDE_MENU_CUSTOM_APPS = getattr(settings, 'JET_SIDE_MENU_CUSTOM_APPS', None)
 
 # Improved usability
 JET_CHANGE_FORM_SIBLING_LINKS = getattr(settings, 'JET_CHANGE_FORM_SIBLING_LINKS', True)
+
+JET_SHOW_COUNT_ON_ADMIN_PAGE = getattr(settings, 'JET_SHOW_COUNT_ON_ADMIN_PAGE', True)
